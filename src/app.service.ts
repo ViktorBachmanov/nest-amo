@@ -17,6 +17,7 @@ export class AppService {
 
     this.code = req.query.code as string;
     //return { code: JSON.stringify(req.headers) };
+    return this.code;
   }
 
   getTokens() {

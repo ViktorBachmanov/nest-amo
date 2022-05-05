@@ -13,8 +13,10 @@ export class AppController {
   //   return this.appService.getHello();
   // }
   getCode(@Req() req: Request) {
-    this.appService.getCode(req);
+    const code = this.appService.getCode(req);
 
     this.appService.getTokens();
+
+    return code;
   }
 }
