@@ -12,10 +12,15 @@ export class AppController {
   // getHello(): string {
   //   return this.appService.getHello();
   // }
-  getCode(@Req() req: Request) {
+  async getCode(@Req() req: Request) {
+    console.log('Controller getCode()');
     const code = this.appService.getCode(req);
 
-    this.appService.getTokens();
+    await this.appService.getTokensAsync();
+
+    //this.appService.createContacts();
+
+    this.appService.getAllContacts();
 
     return code;
   }
