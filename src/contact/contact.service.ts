@@ -18,10 +18,36 @@ export class ContactService {
   // findOne(id: number) {
   //   return `This action returns a #${id} contact`;
   // }
-  findOne(query: any) {
+  async findOne(query: any) {
     console.log('Handle request');
 
-    getAllContacts();
+    const allContacts: Array<any> = await new Promise((resolve, reject) => {
+      getAllContacts(resolve, reject);
+    });
+
+    console.log('All contacts: ', allContacts);
+    allContacts.forEach((contact) => {
+      const customFields = contact.custom_fields_values;
+      console.log('\ncustom_fields_values: ', customFields);
+
+      if (!customFields) {
+        return;
+      }
+
+      customFields.forEach((field) => {
+        console.log(field.values);
+      });
+
+      const compareResult = customFields.some((field) => {
+        console.log('field_code: ', field.field_code);
+        return field.values.some((valueObj) => {
+          console.log('field_value: ', valueObj.value);
+          console.log('query_value: ', query[field.field_code]);
+          return valueObj.value === query[field.field_code];
+        });
+      });
+      console.log('compareResult: ', compareResult);
+    });
 
     //return `This action returns the contact and ${query.add}`;
   }
@@ -37,7 +63,7 @@ export class ContactService {
 
 // helper functions
 
-function getAllContacts() {
+async function getAllContacts(resolve, reject) {
   console.log('\ngetAllContacts: \n');
 
   const data = fs.readFileSync('private/file.txt', 'utf8');
@@ -63,16 +89,17 @@ function getAllContacts() {
 
       const resBody = JSON.parse(str);
       const contacts = resBody._embedded.contacts;
-      console.log('Contacts: ', contacts);
-      contacts.forEach((contact) => {
-        const customFields = contact.custom_fields_values;
-        console.log('\ncustom_fields_values: ', customFields);
-        if (customFields) {
-          customFields.forEach((field) => {
-            console.log(field.values);
-          });
-        }
-      });
+      // console.log('Contacts: ', contacts);
+      // contacts.forEach((contact) => {
+      //   const customFields = contact.custom_fields_values;
+      //   console.log('\ncustom_fields_values: ', customFields);
+      //   if (customFields) {
+      //     customFields.forEach((field) => {
+      //       console.log(field.values);
+      //     });
+      //   }
+      // });
+      resolve(contacts);
     });
   };
 

@@ -15,8 +15,14 @@
   <body>
     <form method='GET' action='/contact/find'>
       <input name='name' placeholder='Имя Фамилия' />
-      <input name='email' type='email' placeholder='Email' />
-      <input name='tel' type='tel' placeholder='Телефон' />
+      <input name='EMAIL' type='email' placeholder='Email' />
+      <input
+        name='PHONE'
+        type='tel'
+        placeholder='Телефон'
+        pattern='[0-9]{7}'
+        title='Только цифры (7 шт.)'
+      />
 
       <button type='submit'>Отправить</button>
 
