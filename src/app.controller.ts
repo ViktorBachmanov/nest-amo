@@ -2,7 +2,7 @@ import { Controller, Get, Post, Render, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request } from 'express';
 
-@Controller()
+@Controller('auth')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -17,6 +17,7 @@ export class AppController {
     const code = this.appService.getCode(req);
 
     await this.appService.getTokensAsync();
+    
 
     //this.appService.createContacts();
 

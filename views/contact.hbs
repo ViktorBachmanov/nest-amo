@@ -1,0 +1,26 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Document</title>
+
+    <style>
+      input { display: block; margin: 0.5rem; }
+    </style>
+
+    {{! <script src='js/contact.js'></script> }}
+
+  </head>
+  <body>
+    <form method='GET' action='/contact/find'>
+      <input name='first_name' placeholder='Имя' />
+      <input name='last_name' placeholder='Фамилия' />
+      <input name='email' type='email' placeholder='Email' />
+      <input name='tel' type='tel' placeholder='Телефон' />
+
+      <button type='submit'>Отправить</button>
+
+    </form>
+  </body>
+</html>
