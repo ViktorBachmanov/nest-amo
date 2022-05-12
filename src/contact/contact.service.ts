@@ -15,8 +15,9 @@ export class ContactService {
   // findOne(id: number) {
   //   return `This action returns a #${id} contact`;
   // }
-  findOne() {
-    return `This action returns a contact`;
+  findOne(query: any) {
+    console.log('Handle request');
+    return `This action returns the contact and ${query.add}`;
   }
 
   update(id: number, updateContactDto: UpdateContactDto) {

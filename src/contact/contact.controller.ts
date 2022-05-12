@@ -43,8 +43,8 @@ export class ContactController {
   //   return this.contactService.findOne(+id);
   // }
   @Get('find')
-  findOne() {
-    return this.contactService.findOne();
+  findOne(@Query() query: any) {
+    return this.contactService.findOne(query);
   }
 
   @Patch(':id')
