@@ -12,8 +12,11 @@ export class ContactService {
     return `This action returns all contact`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  // findOne(id: number) {
+  //   return `This action returns a #${id} contact`;
+  // }
+  findOne() {
+    return `This action returns a contact`;
   }
 
   update(id: number, updateContactDto: UpdateContactDto) {

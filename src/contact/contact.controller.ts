@@ -38,14 +38,13 @@ export class ContactController {
     // };
   }
 
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.contactService.findOne(+id);
+  // }
   @Get('find')
-  find() {
-    return 'find';
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactService.findOne(+id);
+  findOne() {
+    return this.contactService.findOne();
   }
 
   @Patch(':id')
