@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Req } from '@nestjs/common';
 import { Request } from 'express';
 
-var https = require('https');
+const https = require('https');
+const fs = require('fs');
+
 //var os = require('os');
 require('dotenv').config();
 
@@ -44,7 +46,7 @@ export class AppService {
       },
     };
 
-    const self = this;
+    //const self = this;
 
     const callback = function (response) {
       console.log('Headers: ', response.headers);
@@ -58,12 +60,14 @@ export class AppService {
         console.log('response end this: ', self);
         console.log(str);
 
-        const resBody = JSON.parse(str);
-        self.accessToken = resBody.access_token;
+        //const resBody = JSON.parse(str);
+        //self.accessToken = resBody.access_token;
+        fs.writeFileSync('private/file.txt', str);
 
-        console.log('\nAccess-Token: ', self.accessToken);
+        //console.log('\nAccess-Token: ', self.accessToken);
 
-        resolve(resBody);
+        //resolve(resBody);
+        resolve();
       });
     };
 

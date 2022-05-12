@@ -17,11 +17,10 @@ export class AppController {
     const code = this.appService.getCode(req);
 
     await this.appService.getTokensAsync();
-    
 
     //this.appService.createContacts();
 
-    this.appService.getAllContacts();
+    //this.appService.getAllContacts();
 
     return code;
   }
