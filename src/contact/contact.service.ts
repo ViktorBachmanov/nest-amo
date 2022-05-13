@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
-import FreshContact from './FreshContact';
-
 const https = require('https');
 const fs = require('fs');
 
@@ -14,7 +12,10 @@ interface FindContactResponse {
 
 @Injectable()
 export class ContactService {
-  create(createContactDto: CreateContactDto) {
+  // create(createContactDto: CreateContactDto) {
+  //   return 'This action adds a new contact';
+  // }
+  create(contact: any) {
     return 'This action adds a new contact';
   }
 
@@ -28,58 +29,46 @@ export class ContactService {
   async findOne(query: any) {
     console.log('Handle request');
 
-    const allContacts: Array<any> = await new Promise((resolve, reject) => {
-      getAllContacts(resolve, reject);
-    });
+    // const allContacts: Array<any> = await new Promise((resolve, reject) => {
+    //   getAllContacts(resolve, reject);
+    // });
 
-    console.log('All contacts: ', allContacts);
-    allContacts.forEach((contact) => {
-      const customFields = contact.custom_fields_values;
-      console.log('\ncustom_fields_values: ', customFields);
+    // console.log('All contacts: ', allContacts);
+    // allContacts.forEach((contact) => {
+    //   const customFields = contact.custom_fields_values;
+    //   console.log('\ncustom_fields_values: ', customFields);
 
-      if (!customFields) {
-        return;
-      }
+    //   if (!customFields) {
+    //     return;
+    //   }
 
-      customFields.forEach((field) => {
-        console.log(field.values);
-      });
+    //   customFields.forEach((field) => {
+    //     console.log(field.values);
+    //   });
 
-      const compareResult = customFields.some((field) => {
-        console.log('field_code: ', field.field_code);
-        return field.values.some((valueObj) => {
-          console.log('field_value: ', valueObj.value);
-          console.log('query_value: ', query[field.field_code]);
-          return valueObj.value === query[field.field_code];
-        });
-      });
-      console.log('compareResult: ', compareResult);
-    });
+    //   const compareResult = customFields.some((field) => {
+    //     console.log('field_code: ', field.field_code);
+    //     return field.values.some((valueObj) => {
+    //       console.log('field_value: ', valueObj.value);
+    //       console.log('query_value: ', query[field.field_code]);
+    //       return valueObj.value === query[field.field_code];
+    //     });
+    //   });
+    //   console.log('compareResult: ', compareResult);
+    // });
 
-    // const response: any = await findContactByQueryParam(query['PHONE']);
+    const response: any = await findContactByQueryParam(query['PHONE']);
 
-    // if(response.statusCode === 200) {
-
-    // }
-
-    const freshContact = new FreshContact(query);
-    freshContact.setName();
-    freshContact.setCustomField('PHONE');
-    console.log('FreshContact: ', freshContact);
-    console.log(
-      'custom_fields_values: ',
-      freshContact.data.custom_fields_values,
-    );
-    console.log(
-      'custom_fields_values_values: ',
-      freshContact.data.custom_fields_values[0].values,
-    );
+    return response.statusCode === 200 ? JSON.parse(response.body) : null;
 
     //return `This action returns the contact and ${query.add}`;
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  // update(id: number, updateContactDto: UpdateContactDto) {
+  //   return `This action updates a #${id} contact`;
+  // }
+  update(contact: any) {
+    //return `This action updates a #${id} contact`;
   }
 
   remove(id: number) {

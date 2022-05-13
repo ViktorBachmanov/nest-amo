@@ -15,6 +15,8 @@ export default class FreshContact {
   constructor(query: any, data = {} as ContactData) {
     this.query = query;
     this.data = data;
+
+    this.setName();
   }
 
   setName() {
