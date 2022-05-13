@@ -2,8 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
+import FreshContact from './FreshContact';
+
 const https = require('https');
 const fs = require('fs');
+
+interface FindContactResponse {
+  statusCode: number;
+  body: string;
+}
 
 @Injectable()
 export class ContactService {
@@ -21,36 +28,52 @@ export class ContactService {
   async findOne(query: any) {
     console.log('Handle request');
 
-    // const allContacts: Array<any> = await new Promise((resolve, reject) => {
-    //   getAllContacts(resolve, reject);
-    // });
+    const allContacts: Array<any> = await new Promise((resolve, reject) => {
+      getAllContacts(resolve, reject);
+    });
 
-    // console.log('All contacts: ', allContacts);
-    // allContacts.forEach((contact) => {
-    //   const customFields = contact.custom_fields_values;
-    //   console.log('\ncustom_fields_values: ', customFields);
+    console.log('All contacts: ', allContacts);
+    allContacts.forEach((contact) => {
+      const customFields = contact.custom_fields_values;
+      console.log('\ncustom_fields_values: ', customFields);
 
-    //   if (!customFields) {
-    //     return;
-    //   }
+      if (!customFields) {
+        return;
+      }
 
-    //   customFields.forEach((field) => {
-    //     console.log(field.values);
-    //   });
+      customFields.forEach((field) => {
+        console.log(field.values);
+      });
 
-    //   const compareResult = customFields.some((field) => {
-    //     console.log('field_code: ', field.field_code);
-    //     return field.values.some((valueObj) => {
-    //       console.log('field_value: ', valueObj.value);
-    //       console.log('query_value: ', query[field.field_code]);
-    //       return valueObj.value === query[field.field_code];
-    //     });
-    //   });
-    //   console.log('compareResult: ', compareResult);
-    // });
+      const compareResult = customFields.some((field) => {
+        console.log('field_code: ', field.field_code);
+        return field.values.some((valueObj) => {
+          console.log('field_value: ', valueObj.value);
+          console.log('query_value: ', query[field.field_code]);
+          return valueObj.value === query[field.field_code];
+        });
+      });
+      console.log('compareResult: ', compareResult);
+    });
 
-    let paramName = 'PHONE';
-    findContactByQueryParam(paramName, query[paramName]);
+    // const response: any = await findContactByQueryParam(query['PHONE']);
+
+    // if(response.statusCode === 200) {
+
+    // }
+
+    const freshContact = new FreshContact(query);
+    freshContact.setName();
+    freshContact.setCustomField('PHONE');
+    console.log('FreshContact: ', freshContact);
+    console.log(
+      'custom_fields_values: ',
+      freshContact.data.custom_fields_values,
+    );
+    console.log(
+      'custom_fields_values_values: ',
+      freshContact.data.custom_fields_values[0].values,
+    );
 
     //return `This action returns the contact and ${query.add}`;
   }
@@ -103,7 +126,7 @@ async function getAllContacts(resolve, reject) {
   req.end();
 }
 
-function findContactByQueryParam(paramName: string, paramValue: string) {
+function findContactByQueryParam(paramValue: string) {
   console.log('\nfindContactByQueryParam: \n');
 
   return new Promise((resolve, reject) => {
@@ -117,22 +140,31 @@ function findContactByQueryParam(paramName: string, paramValue: string) {
       },
     };
 
-    const callback = function (response) {
+    const callback = function (res) {
       var str = '';
-      response.on('data', function (chunk) {
+      res.on('data', function (chunk) {
         str += chunk;
       });
 
-      response.on('end', function () {
+      res.on('end', function () {
         console.log('Response end: ');
-        console.log('Status code: ', response.statusCode);
-        console.log('Headers: ', response.headers);
+        console.log('Status code: ', res.statusCode);
+        console.log('Headers: ', res.headers);
         console.log(str);
 
         // const resBody = JSON.parse(str);
         // const contacts = resBody._embedded.contacts;
 
-        resolve(str);
+        const response: FindContactResponse = {
+          statusCode: res.statusCode,
+          body: str,
+        };
+
+        resolve(response);
+      });
+
+      res.on('error', function (err) {
+        reject(err.message);
       });
     };
 
