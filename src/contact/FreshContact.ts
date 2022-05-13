@@ -17,6 +17,8 @@ export default class FreshContact {
     this.data = data;
 
     this.setName();
+    this.setCustomField('EMAIL');
+    this.setCustomField('PHONE');
   }
 
   setName() {
@@ -31,12 +33,17 @@ export default class FreshContact {
     const newCustomFieldValue = { value: this.query[fieldName] };
 
     if (field) {
-      field.values.push({ value: this.query[fieldName] });
+      const isValueExist = field.values.some(
+        (elem) => elem.value === this.query[fieldName],
+      );
+      if (!isValueExist) {
+        field.values.push(newCustomFieldValue);
+      }
     } else {
       this.data.custom_fields_values = [];
       this.data.custom_fields_values.push({
         field_code: fieldName,
-        values: [{ value: this.query[fieldName] }],
+        values: [newCustomFieldValue],
       });
     }
   }

@@ -55,10 +55,20 @@ export class ContactController {
     let freshContact: FreshContact;
     if (contact) {
       freshContact = new FreshContact(query, contact);
-      this.contactService.update(freshContact);
+      console.log('freshContact.data: ', freshContact.data);
+      console.log(
+        'freshContact.data.values: ',
+        freshContact.data.custom_fields_values[0].values,
+      );
+      this.contactService.update(freshContact.data);
     } else {
       freshContact = new FreshContact(query);
-      this.contactService.create(freshContact);
+      console.log('freshContact.data: ', freshContact.data);
+      console.log(
+        'freshContact.data.values: ',
+        freshContact.data.custom_fields_values[0].values,
+      );
+      this.contactService.create(freshContact.data);
     }
 
     // freshContact.setCustomField('PHONE');

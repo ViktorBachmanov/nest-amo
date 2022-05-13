@@ -8,6 +8,8 @@ const fs = require('fs');
 //var os = require('os');
 require('dotenv').config();
 
+import { saveTokens } from './util';
+
 @Injectable()
 export class AppService {
   private account: string = 'https://vbachmanovmailru.amocrm.ru';
@@ -57,12 +59,15 @@ export class AppService {
       });
 
       response.on('end', function () {
-        console.log('response end this: ', self);
+        //console.log('response end this: ', self);
         console.log(str);
 
-        //const resBody = JSON.parse(str);
-        //self.accessToken = resBody.access_token;
-        fs.writeFileSync('private/file.txt', str);
+        // const resBody = JSON.parse(str);
+        // const expires_in = resBody.expires_in;
+        // resBody.timeToRefresh = Date.now() + (expires_in - 60 * 5) * 1000;
+
+        // fs.writeFileSync('private/file.txt', JSON.stringify(resBody));
+        saveTokens(str);
 
         //console.log('\nAccess-Token: ', self.accessToken);
 
