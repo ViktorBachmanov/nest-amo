@@ -20,8 +20,9 @@
         name='PHONE'
         type='tel'
         placeholder='Телефон'
-        pattern='[0-9]{7}'
-        title='Только цифры (7 шт.)'
+        pattern='[+]?[0-9]{7,11}'
+        title='Допустимые символы: +0...9'
+        required='required'
       />
 
       <button type='submit'>Отправить</button>
