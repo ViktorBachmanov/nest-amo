@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
+//import got, { Options } from 'got';
+
 const https = require('https');
 const fs = require('fs');
 
-interface FindContactResponse {
+interface AsyncHttpsResponse {
   statusCode: number;
   body: string;
 }
@@ -16,7 +18,11 @@ export class ContactService {
   //   return 'This action adds a new contact';
   // }
   create(contact: any) {
-    return 'This action adds a new contact';
+    console.log('Create: ');
+
+    asyncHttpsRequest('api/v4/contacts', 'POST', [contact]);
+
+    //return 'This action adds a new contact';
   }
 
   findAll() {
@@ -144,7 +150,7 @@ function findContactByQueryParam(paramValue: string) {
         // const resBody = JSON.parse(str);
         // const contacts = resBody._embedded.contacts;
 
-        const response: FindContactResponse = {
+        const response: AsyncHttpsResponse = {
           statusCode: res.statusCode,
           body: str,
         };
@@ -160,6 +166,53 @@ function findContactByQueryParam(paramValue: string) {
     const url = `https://vbachmanovmailru.amocrm.ru/api/v4/contacts?query=${paramValue}`;
     const req = https.request(url, options, callback);
 
+    req.end();
+  });
+}
+
+function asyncHttpsRequest(urlPath: string, method: string, data: any) {
+  const urlPrefix = 'https://vbachmanovmailru.amocrm.ru/';
+
+  return new Promise((resolve, reject) => {
+    const data = fs.readFileSync('private/file.txt', 'utf8');
+    const accessToken = JSON.parse(data).access_token;
+
+    const options = {
+      url: urlPrefix + urlPath,
+      method,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const callback = function (res) {
+      var str = '';
+      res.on('data', function (chunk) {
+        str += chunk;
+      });
+
+      res.on('end', function () {
+        console.log('Response end: ');
+        console.log('Status code: ', res.statusCode);
+        console.log('Headers: ', res.headers);
+        console.log(str);
+
+        const response: AsyncHttpsResponse = {
+          statusCode: res.statusCode,
+          body: str,
+        };
+
+        resolve(str);
+      });
+
+      res.on('error', function (err) {
+        reject(err.message);
+      });
+    };
+
+    const req = https.request(options, callback);
+
+    req.write(JSON.stringify(data));
     req.end();
   });
 }

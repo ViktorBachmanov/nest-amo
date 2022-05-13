@@ -46,6 +46,7 @@ export class ContactController {
   // findOne(@Param('id') id: string) {
   //   return this.contactService.findOne(+id);
   // }
+
   @Get('process')
   async process(@Query() query: any, @Res() response: any) {
     //return this.contactService.findOne(query);
