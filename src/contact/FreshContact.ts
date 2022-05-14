@@ -28,6 +28,7 @@ export default class FreshContact {
 
   setName() {
     this.data.name = this.query.name;
+    [this.data.first_name, this.data.last_name] = this.query.name.split(' ');
   }
 
   setCustomField(fieldName: string) {
