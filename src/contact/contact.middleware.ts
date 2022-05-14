@@ -2,7 +2,6 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 import { asyncHttpsRequest, saveTokens } from '../util';
-import { AsyncHttpsResponse } from '../types';
 
 const fs = require('fs');
 
@@ -12,7 +11,6 @@ require('dotenv').config();
 export class ContactMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     console.log('ContactMiddleware');
-    //req.query.add = 'Доп. параметр';
 
     const data = fs.readFileSync('private/file.txt', 'utf8');
     const { timeToRefresh, refresh_token } = JSON.parse(data);
@@ -31,13 +29,10 @@ export class ContactMiddleware implements NestMiddleware {
       );
 
       if (response.statusCode === 200) {
+        console.log('Токен доступа успешно обновлен');
         saveTokens(response.str);
       }
     }
-
-    // res.writeHead(200, { 'content-type': 'application/json' });
-    // res.write(JSON.stringify({ test: 'end response' }));
-    // res.end();
 
     next();
   }

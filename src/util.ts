@@ -17,7 +17,6 @@ export function asyncHttpsRequest(
     const accessToken = JSON.parse(tokens).access_token;
 
     const options = {
-      //url: urlPrefix + urlPath,
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -52,8 +51,8 @@ export function asyncHttpsRequest(
 
     const req = https.request(url, options, callback);
 
-    console.log('asyncHttpsRequest options: ', options);
-    console.log('asyncHttpsRequest data: ', data);
+    //console.log('asyncHttpsRequest options: ', options);
+    //console.log('asyncHttpsRequest data: ', data);
 
     req.write(JSON.stringify(data));
     req.end();
