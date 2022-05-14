@@ -149,48 +149,50 @@ async function getAllContacts(resolve, reject) {
 function findContactByQueryParam(paramValue: string) {
   console.log('\nfindContactByQueryParam: \n');
 
-  return new Promise((resolve, reject) => {
-    const data = fs.readFileSync('private/file.txt', 'utf8');
-    const accessToken = JSON.parse(data).access_token;
+  // return new Promise((resolve, reject) => {
+  //   const data = fs.readFileSync('private/file.txt', 'utf8');
+  //   const accessToken = JSON.parse(data).access_token;
 
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   };
 
-    const callback = function (res) {
-      var str = '';
-      res.on('data', function (chunk) {
-        str += chunk;
-      });
+  //   const callback = function (res) {
+  //     var str = '';
+  //     res.on('data', function (chunk) {
+  //       str += chunk;
+  //     });
 
-      res.on('end', function () {
-        console.log('Response end: ');
-        console.log('Status code: ', res.statusCode);
-        console.log('Headers: ', res.headers);
-        console.log(str);
+  //     res.on('end', function () {
+  //       console.log('Response end: ');
+  //       console.log('Status code: ', res.statusCode);
+  //       console.log('Headers: ', res.headers);
+  //       console.log(str);
 
-        // const resBody = JSON.parse(str);
-        // const contacts = resBody._embedded.contacts;
+  //       // const resBody = JSON.parse(str);
+  //       // const contacts = resBody._embedded.contacts;
 
-        const response: AsyncHttpsResponse = {
-          statusCode: res.statusCode,
-          str,
-        };
+  //       const response: AsyncHttpsResponse = {
+  //         statusCode: res.statusCode,
+  //         str,
+  //       };
 
-        resolve(response);
-      });
+  //       resolve(response);
+  //     });
 
-      res.on('error', function (err) {
-        reject(err.message);
-      });
-    };
+  //     res.on('error', function (err) {
+  //       reject(err.message);
+  //     });
+  //   };
 
-    const url = `https://vbachmanovmailru.amocrm.ru/api/v4/contacts?query=${paramValue}`;
-    const req = https.request(url, options, callback);
+  //   const url = `https://vbachmanovmailru.amocrm.ru/api/v4/contacts?query=${paramValue}`;
+  //   const req = https.request(url, options, callback);
 
-    req.end();
-  });
+  //   req.end();
+  // });
+
+  return asyncHttpsRequest(`api/v4/contacts?query=${paramValue}`, 'GET');
 }
