@@ -10,6 +10,6 @@ import { ContactMiddleware } from './contact.middleware';
 })
 export class ContactModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContactMiddleware).forRoutes('contact/find');
+    consumer.apply(ContactMiddleware).forRoutes('contact/process');
   }
 }

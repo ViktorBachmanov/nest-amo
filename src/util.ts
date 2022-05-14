@@ -3,7 +3,11 @@ const https = require('https');
 
 import { AsyncHttpsResponse } from './types';
 
-export function asyncHttpsRequest(urlPath: string, method: string, data: any) {
+export function asyncHttpsRequest(
+  urlPath: string,
+  method: string,
+  data: any,
+): Promise<AsyncHttpsResponse> {
   const urlPrefix = 'https://vbachmanovmailru.amocrm.ru/';
 
   const url = urlPrefix + urlPath;

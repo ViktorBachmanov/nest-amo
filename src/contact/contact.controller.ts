@@ -16,6 +16,7 @@ import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 import FreshContact from './FreshContact';
+import { AsyncHttpsResponse } from '../types';
 
 @Controller('contact')
 export class ContactController {
@@ -48,11 +49,14 @@ export class ContactController {
   // }
 
   @Get('process')
-  async process(@Query() query: any, @Res() response: any) {
+  async process(@Query() query: any) {
     //return this.contactService.findOne(query);
     const contact = await this.contactService.findOne(query);
 
     let freshContact: FreshContact;
+    let response: AsyncHttpsResponse;
+    let contactId: number;
+
     if (contact) {
       freshContact = new FreshContact(query, contact);
       console.log('freshContact.data: ', freshContact.data);
@@ -60,7 +64,12 @@ export class ContactController {
         'freshContact.data.values: ',
         freshContact.data.custom_fields_values[0].values,
       );
-      this.contactService.update(freshContact.data);
+      response = await this.contactService.update(freshContact.data);
+      if (response.statusCode !== 200) {
+        return 'Не удалось обновить контакт';
+      }
+      console.log('Контакт успешно обновлен');
+      contactId = JSON.parse(response.str)._embedded.contacts[0].id;
     } else {
       freshContact = new FreshContact(query);
       console.log('freshContact.data: ', freshContact.data);
@@ -68,8 +77,14 @@ export class ContactController {
         'freshContact.data.values: ',
         freshContact.data.custom_fields_values[0].values,
       );
-      this.contactService.create(freshContact.data);
+      response = await this.contactService.create(freshContact.data);
+      if (response.statusCode !== 200) {
+        return 'Не удалось создать контакт';
+      }
+      console.log('Контакт успешно создан');
+      contactId = JSON.parse(response.str)._embedded.contacts[0].id;
     }
+    console.log('Conact_id: ', contactId);
 
     // freshContact.setCustomField('PHONE');
     // console.log('FreshContact: ', freshContact);

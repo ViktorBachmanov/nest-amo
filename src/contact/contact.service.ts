@@ -18,7 +18,7 @@ export class ContactService {
   create(contact: any) {
     console.log('Create: ');
 
-    asyncHttpsRequest('api/v4/contacts', 'POST', [contact]);
+    return asyncHttpsRequest('api/v4/contacts', 'POST', [contact]);
 
     //return 'This action adds a new contact';
   }
@@ -81,7 +81,7 @@ export class ContactService {
   update(contact: any) {
     console.log('Update: ');
 
-    asyncHttpsRequest('api/v4/contacts', 'PATCH', [contact]);
+    return asyncHttpsRequest('api/v4/contacts', 'PATCH', [contact]);
     //return `This action updates a #${id} contact`;
   }
 
