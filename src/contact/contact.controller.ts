@@ -22,11 +22,7 @@ export class ContactController {
 
     if (contact) {
       freshContact = new FreshContact(query, contact);
-      //console.log('freshContact.data: ', freshContact.data);
-      // console.log(
-      //   'freshContact.data.values: ',
-      //   freshContact.data.custom_fields_values[0].values,
-      // );
+
       response = await this.contactService.update(freshContact.data);
       if (response.statusCode !== 200) {
         return 'Не удалось обновить контакт';
