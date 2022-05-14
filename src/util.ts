@@ -1,7 +1,9 @@
 const fs = require('fs');
 const https = require('https');
 
-import { AsyncHttpsResponse } from './types';
+require('dotenv').config();
+
+import { AsyncHttpsResponse, GrantType } from './types';
 
 export function asyncHttpsRequest(
   urlPath: string,
@@ -65,4 +67,30 @@ export function saveTokens(response: string) {
   resBody.timeToRefresh = Date.now() + (expires_in - 60 * 5) * 1000;
 
   fs.writeFileSync('private/file.txt', JSON.stringify(resBody));
+}
+
+export function createTokensPayload(
+  grant_type: GrantType,
+  varFieldValue: string,
+) {
+  const payload = {
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    redirect_uri: process.env.REDIRECT_URI,
+    grant_type,
+  };
+
+  let varFieldName: string;
+  switch (grant_type) {
+    case GrantType.Authorization:
+      varFieldName = 'code';
+      break;
+    case GrantType.Refresh:
+      varFieldName = 'refresh_token';
+      break;
+  }
+
+  payload[varFieldName] = varFieldValue;
+
+  return payload;
 }

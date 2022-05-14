@@ -1,27 +1,25 @@
-import { Controller, Get, Post, Render, Req } from '@nestjs/common';
+import { Controller, Get, Post, Render, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  //@Render('index')
-  //index() {}
-  // getHello(): string {
-  //   return this.appService.getHello();
-  // }
-  async getCode(@Req() req: Request) {
-    console.log('Controller getCode()');
-    const code = this.appService.getCode(req);
+  async getCode(@Req() req: Request, @Res() res: Response) {
+    console.log('Controller auth getCode()');
+    //const code = this.appService.getCode(req);
+    this.appService.getCode(req);
 
-    await this.appService.getTokensAsync();
+    //await this.appService.getTokensAsync();
+    try {
+      this.appService.getTokens();
+    } catch (e) {
+      res.write(e);
+      res.end();
+    }
 
-    //this.appService.createContacts();
-
-    //this.appService.getAllContacts();
-
-    return code;
+    //return code;
   }
 }
