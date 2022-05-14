@@ -69,10 +69,7 @@ export function saveTokens(response: string) {
   fs.writeFileSync('private/file.txt', JSON.stringify(resBody));
 }
 
-export function createTokensPayload(
-  grant_type: GrantType,
-  varFieldValue: string,
-) {
+export function requestTokens(grant_type: GrantType, varFieldValue: string) {
   const payload = {
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
@@ -91,6 +88,5 @@ export function createTokensPayload(
   }
 
   payload[varFieldName] = varFieldValue;
-
-  return payload;
+  return asyncHttpsRequest('oauth2/access_token', 'POST', payload);
 }

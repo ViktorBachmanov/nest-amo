@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
-import { asyncHttpsRequest, saveTokens, createTokensPayload } from '../util';
+import { saveTokens, requestTokens } from '../util';
 import { AsyncHttpsResponse, GrantType } from '../types';
 
 const fs = require('fs');
@@ -18,17 +18,9 @@ export class ContactMiddleware implements NestMiddleware {
 
     if (timeToRefresh < Date.now()) {
       try {
-        const response: AsyncHttpsResponse = await asyncHttpsRequest(
-          'oauth2/access_token',
-          'POST',
-          // {
-          //   client_id: process.env.CLIENT_ID,
-          //   client_secret: process.env.CLIENT_SECRET,
-          //   grant_type: 'refresh_token',
-          //   refresh_token,
-          //   redirect_uri: process.env.REDIRECT_URI,
-          // },
-          createTokensPayload(GrantType.Refresh, refresh_token),
+        const response: AsyncHttpsResponse = await requestTokens(
+          GrantType.Refresh,
+          refresh_token,
         );
 
         if (response.statusCode === 200) {
