@@ -18,7 +18,7 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 import FreshContact from './FreshContact';
 import { AsyncHttpsResponse } from '../types';
 
-@Controller('contact')
+@Controller()
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
