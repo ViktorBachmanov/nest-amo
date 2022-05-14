@@ -85,9 +85,26 @@ export class ContactService {
     //return `This action updates a #${id} contact`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
+  createLead(contactId: number) {
+    console.log('Lead creating...');
+
+    const lead = {
+      name: 'Сделка выгодная',
+      _embedded: {
+        contacts: [
+          {
+            id: contactId,
+          },
+        ],
+      },
+    };
+
+    return asyncHttpsRequest('api/v4/leads', 'POST', [lead]);
   }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} contact`;
+  // }
 }
 
 // helper functions

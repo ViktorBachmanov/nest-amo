@@ -86,6 +86,11 @@ export class ContactController {
     }
     console.log('Conact_id: ', contactId);
 
+    response = await this.contactService.createLead(contactId);
+    return response.statusCode === 200
+      ? 'Сделка создана успешно'
+      : 'Не удалось создать сделку';
+
     // freshContact.setCustomField('PHONE');
     // console.log('FreshContact: ', freshContact);
     // console.log(
@@ -103,8 +108,8 @@ export class ContactController {
   //   return this.contactService.update(+id, updateContactDto);
   // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contactService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.contactService.remove(+id);
+  // }
 }
