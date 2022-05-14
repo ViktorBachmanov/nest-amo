@@ -61,7 +61,11 @@ export class ContactService {
     //   console.log('compareResult: ', compareResult);
     // });
 
-    const response: any = await findContactByQueryParam(query['PHONE']);
+    let response: any = await findContactByQueryParam(query['EMAIL']);
+
+    if (response.statusCode !== 200) {
+      response = await findContactByQueryParam(query['PHONE']);
+    }
 
     return response.statusCode === 200
       ? JSON.parse(response.str)._embedded.contacts[0]
